@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+  <include file = "$(find pkg_techfest_imc)/launch/gazebo.launch" />
+  <include file = "$(find pkg_techfest_imc)/launch/rviz.launch" />
+  <node pkg="pkg_techfest_imc" type="move_diffdrive.py" name="move_diffdrive.py" output="screen" />
+</launch>

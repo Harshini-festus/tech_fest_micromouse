@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<robot name="diff_bot">
+    <link name="base_link">
+        <pose>0 0 0.1 0 0 0</pose>
+        <inertial>
+            <mass value="0.5"/>
+            <origin rpy="0  0  0" xyz="0 0.01 0"/>
+            <inertia ixx="0.00022083" ixy="0" ixz="0" iyy="0.00022083" iyz="0" izz="0.00040833"/>
+        </inertial>
+        <collision name="collision">
+            <origin rpy="0  0  0" xyz="0     0    -0.005"/>
+            <geometry>
+                <box size="0.07 0.07 0.02"/>
+            </geometry>
+        </collision>
+        <visual name="base_link_visual">
+            <origin rpy="0  0  0" xyz="0     0    -0.005"/>
+            <geometry>
+                <box size="0.07 0.07 0.02"/>
+            </geometry>
+        </visual>
+        <collision name="caster_collision">
+            <origin rpy="0  0  0" xyz="0     -0.03  -0.015"/>
+            <geometry>
+                <sphere radius="0.005"/>
+            </geometry>
+            <surface>
+                <friction>
+                <ode>
+                    <mu>100</mu>
+                    <mu2>100</mu2>
+                    <slip1>1000.0</slip1>
+                    <slip2>1000.0</slip2>
+                </ode>
+                </friction>
+            </surface>
+        </collision>
+        <visual name="caster_visual">
+            <origin rpy="0  0  0" xyz="0   -0.03  -0.015"/>
+            <geometry>
+                <sphere radius="0.005"/>
+            </geometry>
+        </visual>
+    </link>
+    <gazebo reference="base_link">
+    	<material>Gazebo/White</material>
+        <turnGravityOff>false</turnGravityOff>
+        <kp>10000.0</kp>
+        <kd>1.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>1.0</maxVel>
+  	</gazebo>
+    <link name="left_wheel">
+        <!--origin xyz="0.1 0.13 0.1" rpy="0 1.5707 1.5707"/-->
+        <collision name="collision">
+            <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder length="0.01" radius="0.02"/>
+            </geometry>
+        </collision>
+        <visual name="left_wheel_visual">
+            <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder length="0.01" radius="0.02"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <mass value="0.2"/>
+            <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+            <inertia ixx="2.3e-06" ixy="0" ixz="0" iyy="2.3e-06" iyz="0" izz="4.5e-06"/>
+        </inertial>
+    </link>
+    <link name="right_wheel">
+        <!--origin xyz="0.1 -0.13 0.1" rpy="0 1.5707 1.5707"/-->
+        <collision name="collision">
+            <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder length="0.01" radius="0.02"/>
+            </geometry>
+        </collision>
+        <visual name="right_wheel_visual">
+            <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder length="0.01" radius="0.02"/>
+            </geometry> 
+        </visual>
+        <inertial>
+            <mass value="0.2"/>
+            <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+            <inertia ixx="2.3e-06" ixy="0" ixz="0" iyy="2.3e-06" iyz="0" izz="4.5e-06"/>
+        </inertial>
+    </link>
+    <joint name="left_wheel_joint" type="continuous">
+        <origin xyz="0.04 0.02 0" rpy="0 0 0"/>
+        <child link="left_wheel"/>
+        <parent link="base_link"/>
+        <axis xyz="1 0 0" rpy="0 0 0"/>
+        <limit effort="5" velocity="6"/>
+        <joint_properties damping="10000.0" friction="10000.0"/>
+    </joint>
+    <transmission name="tran_left">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="left_wheel_joint">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor_left">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>7</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <gazebo reference="left_wheel">
+        <mu1 value="10.0"/>
+        <mu2 value="10.0"/>
+        <!-- <update_rate>20</update_rate> -->
+        <kp value="10000.0"/>
+        <kd value="1.0"/>
+        <!-- <ki value="1.0"/> -->
+        <fdir1 value="1 0 0"/>
+        <material>Gazebo/Grey</material>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    
+    <joint name="right_wheel_joint" type="continuous">
+        <origin xyz="-0.04  0.02  0" rpy="0 0 0"/>
+        <child link="right_wheel"/>
+        <parent link="base_link"/>
+        <axis xyz="1 0 0" rpy="0 0 0"/>
+        <limit effort="5" velocity="6"/>
+        <joint_properties damping="10000.0" friction="10000.0"/>
+    </joint>
+    <transmission name="tran_right">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="right_wheel_joint">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor_right">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>7</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <gazebo reference="right_wheel">
+        <mu1 value="10.0"/>
+        <mu2 value="10.0"/>
+        <update_rate>20</update_rate>
+        <kp value="10000.0"/>
+        <kd value="1.0"/>
+        <!-- <ki value="1.0"/> -->
+        <fdir1 value="1 0 0"/>
+        <material>Gazebo/Grey</material>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo> 
+	    <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+	      <alwaysOn>true</alwaysOn>
+	      <bodyName>base_link</bodyName>
+	      <topicName>imu</topicName>
+	      <serviceName>imu_service</serviceName>
+	      <gaussianNoise>1.0</gaussianNoise>
+	      <updateRate>20.0</updateRate>
+          <frameName>base_link</frameName>
+	    </plugin>
+  	</gazebo>
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+            <legacyModeNS>true</legacyModeNS>
+            <odometryTopic>odom</odometryTopic>
+            <odometryFrame>odom</odometryFrame>
+            <odometrySource>world</odometrySource>
+            <publishOdomTF>true</publishOdomTF>
+        </plugin>
+    </gazebo>
+
+    <gazebo>
+        <plugin name="robot_groundtruth_sim" filename="libgazebo_ros_p3d.so">
+            <alwaysOn>true</alwaysOn>
+            <updateRate>100.0</updateRate>
+            <bodyName>base_link</bodyName>
+            <topicName>odom</topicName>
+            <frameName>world</frameName>
+        </plugin>
+    </gazebo>
+
+    <link name="sensor_laser">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0.01" />
+            <inertia ixx="0.02" ixy="0" ixz="0" iyy="0.02" iyz="0" izz="0.02"/> 
+        </inertial>
+
+        <visual>
+            <origin xyz="0.02 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="0.005" length="0.02"/>
+            </geometry>
+            <material name="white" />
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.005" length="0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="joint_sensor_laser" type="fixed">
+        <origin rpy="0  0  -1.57" xyz="0    0    0.01"/>
+        <parent link="base_link"/>
+        <child link="sensor_laser"/>
+    </joint>
+
+
+    <gazebo reference="sensor_laser">
+        <sensor type="ray" name="head_hokuyo_sensor">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>true</visualize>
+        <update_rate>20</update_rate>
+        <ray>
+            <scan>
+            <horizontal>
+                <samples>360</samples>
+                <resolution>1</resolution>
+                <min_angle>-1.570796</min_angle>
+                <max_angle>1.570796</max_angle>
+            </horizontal>
+            </scan>
+            <range>
+            <min>0.04</min>
+            <max>10.0</max>
+            <resolution>0.01</resolution>
+            </range>
+        </ray>
+        <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+            <topicName>/diff_bot/laser/scan</topicName>
+            <frameName>sensor_laser</frameName>
+        </plugin>
+        </sensor>
+    </gazebo>
+    <!-- <gazebo>
+        <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller_front">
+            <rosDebugLevel>Debug</rosDebugLevel>
+            <publishWheelTF>false</publishWheelTF>
+            <publishTf>true</publishTf>
+            <publishWheelJointState>true</publishWheelJointState>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>100.0</updateRate>
+            <leftJoint>left_wheel_joint</leftJoint>
+            <rightJoint>right_wheel_joint</rightJoint>
+            <wheelSeparation>0.4</wheelSeparation>
+            <wheelDiameter>0.2</wheelDiameter>
+            <wheelTorque>10.0</wheelTorque>
+            <wheelAcceleration>1.8</wheelAcceleration>
+            <commandTopic>cmd_vel</commandTopic>
+            <odometrySource>world</odometrySource>
+            <broadcastTF>10.0</broadcastTF>
+            <odometryFrame>odom</odometryFrame>
+            <odometryTopic>odom</odometryTopic>
+            <publishOdom>True</publishOdom>
+            <robotBaseFrame>base_link</robotBaseFrame>
+        </plugin>
+    </gazebo> -->
+</robot> 
