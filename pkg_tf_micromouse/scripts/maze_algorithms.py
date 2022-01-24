@@ -16,6 +16,7 @@ import math
 import numpy as np
 import maze_solver
 from dfs_class import dfs
+import dfs_net
 class Maze:
   def __init__(self):
     # For debugging
@@ -186,7 +187,8 @@ class Maze:
           return
         else:
           goal_z = dfs(self.maze_state,self.w, self.h, X, Y, 14, 14)
-          goal_=goal_z.free_node(X, Y)
+          goal_=goal_z.traversal()
+          rospy.loginfo(goal_)
 
       else:
         # rospy.loginfo("Going back to corner...")
@@ -198,9 +200,9 @@ class Maze:
           self.run_number_pub.publish(self.run_number)
           return
         else:
-          goal_dfs = dfs(self.maze_state, self.w, self.h, X, Y, self.start_pos[0], 
-                                self.start_pos[1])
-          goal_=goal_dfs.free_node(X, Y)
+          goal_dfs = dfs(self.maze_state, self.w, self.h, X, Y,self.start_pos[0], self.start_pos[1])
+          goal_=goal_dfs.traversal()
+          rospy.loginfo(goal_)
 
       # Oh no!
       if goal_ == -1:

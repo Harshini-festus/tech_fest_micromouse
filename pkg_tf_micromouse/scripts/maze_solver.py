@@ -56,6 +56,7 @@ def BFS(mat, source_x, source_y, dest_x, dest_y, M, N):
       # check if it is possible to go to position
       # (i + row[k], j + col[k]) from current position
       if isValid(mat, visited, i + row[k], j + col[k], M, N):
+        print(isValid(mat, visited, i + row[k], j + col[k], M, N))
         # mark next cell as visited and enqueue it
         visited[i + row[k]][j + col[k]] = True
         q.append((i + row[k], j + col[k], dist + 1))
