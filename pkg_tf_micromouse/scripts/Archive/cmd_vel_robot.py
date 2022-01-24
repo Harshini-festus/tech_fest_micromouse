@@ -33,11 +33,11 @@ def clbk_odom(msg):
 
 def clbk_laser(msg):
     region = {
-	'p' : msg.ranges[:],
+    'p' : msg.ranges[:],
     }
     # region['p'][0] represents the 0 degree and 0the value start from back and continues in anti-clockwise direction
     for i in range(360):
-	# print region['p'][i]
+        print region['p'][i]
 
 def main():
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
@@ -48,9 +48,9 @@ def main():
 
     while not rospy.is_shutdown():
         msg1 = Twist()
-	#positive speed_z value represents clockwise angular velocity of the bot and positive speed_x value represents forward linear velocity of the robot
+    #positive speed_z value represents clockwise angular velocity of the bot and positive speed_x value represents forward linear velocity of the robot
         speed_z = 0
-	    speed_x = 0.1
+        speed_x = 0.1
         msg1.linear.x = speed_x
         msg1.angular.z = speed_z
         pub.publish(msg1)
